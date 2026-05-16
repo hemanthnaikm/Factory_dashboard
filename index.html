@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Factory Dashboard – Industrial Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: { DEFAULT: '#f59e0b', dark: '#b45309' },
+            surface: { DEFAULT: '#1e1e2e', card: '#2a2a3e', border: '#3a3a5c' },
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#13131f] text-gray-100 min-h-screen font-sans">
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SCREEN 1 – ROLE SELECTION
+  ════════════════════════════════════════════════════════════════════ -->
+  <div id="screen-role" class="screen flex flex-col items-center justify-center min-h-screen px-4">
+    <div class="mb-10 text-center">
+      <div class="flex items-center justify-center gap-3 mb-3">
+        <span class="text-4xl">🏭</span>
+        <h1 class="text-4xl font-extrabold tracking-tight text-amber-400">Factory Dashboard</h1>
+      </div>
+      <p class="text-gray-400 text-sm tracking-widest uppercase">Industrial Operations Platform</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-md">
+      <button onclick="showAdminLogin()" class="role-card group">
+        <span class="role-icon">🛡️</span>
+        <span class="role-label">Admin Portal</span>
+        <span class="role-sub">Full oversight & management</span>
+      </button>
+      <button onclick="showEmployeeSelect()" class="role-card group">
+        <span class="role-icon">👷</span>
+        <span class="role-label">Employee Portal</span>
+        <span class="role-sub">Role-based task access</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SCREEN 2 – ADMIN LOGIN
+  ════════════════════════════════════════════════════════════════════ -->
+  <div id="screen-admin-login" class="screen hidden flex-col items-center justify-center min-h-screen px-4">
+    <div class="login-card">
+      <div class="login-header">🛡️ Admin Login</div>
+      <div id="admin-login-err" class="err-msg hidden">Invalid credentials. Try admin / 1234</div>
+      <label class="field-label">Phone Number</label>
+      <input id="admin-phone" type="tel" placeholder="e.g. 9876543210" class="field-input" />
+      <label class="field-label mt-3">Password</label>
+      <input id="admin-pass" type="password" placeholder="••••••••" class="field-input" />
+      <button onclick="adminLogin()" class="btn-primary mt-5 w-full">Login</button>
+      <button onclick="goHome()" class="btn-ghost mt-2 w-full">← Back</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SCREEN 3 – EMPLOYEE ROLE SELECTION
+  ════════════════════════════════════════════════════════════════════ -->
+  <div id="screen-emp-select" class="screen hidden flex-col items-center justify-center min-h-screen px-4">
+    <div class="mb-8 text-center">
+      <h2 class="text-2xl font-bold text-amber-400">Select Your Role</h2>
+      <p class="text-gray-400 text-sm mt-1">Choose your department to continue</p>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full max-w-lg">
+      <button onclick="showEmpLogin('Wood Supplier')" class="emp-role-card">🪵<span>Wood Supplier</span></button>
+      <button onclick="showEmpLogin('Designer')"      class="emp-role-card">📐<span>Designer</span></button>
+      <button onclick="showEmpLogin('Carpenter')"     class="emp-role-card">🔨<span>Carpenter</span></button>
+      <button onclick="showEmpLogin('Tester')"        class="emp-role-card">🔬<span>Tester</span></button>
+      <button onclick="showEmpLogin('Salesman')"      class="emp-role-card">💼<span>Salesman</span></button>
+    </div>
+    <button onclick="goHome()" class="btn-ghost mt-8">← Back to Roles</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SCREEN 4 – EMPLOYEE LOGIN
+  ════════════════════════════════════════════════════════════════════ -->
+  <div id="screen-emp-login" class="screen hidden flex-col items-center justify-center min-h-screen px-4">
+    <div class="login-card">
+      <div id="emp-login-role-label" class="login-header">Employee Login</div>
+      <div id="emp-login-err" class="err-msg hidden">Invalid credentials</div>
+      <label class="field-label">Phone Number</label>
+      <input id="emp-phone" type="tel" placeholder="e.g. 9876543210" class="field-input" />
+      <label class="field-label mt-3">Password</label>
+      <input id="emp-pass" type="password" placeholder="••••••••" class="field-input" />
+      <button onclick="employeeLogin()" class="btn-primary mt-5 w-full">Login</button>
+      <button onclick="showEmployeeSelect()" class="btn-ghost mt-2 w-full">← Back</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SCREEN 5 – ADMIN DASHBOARD
+  ════════════════════════════════════════════════════════════════════ -->
+  <div id="screen-admin-dash" class="screen hidden flex-col min-h-screen">
+    <!-- Top Nav -->
+    <nav class="top-nav">
+      <div class="flex items-center gap-3">
+        <span class="text-2xl">🏭</span>
+        <span class="text-lg font-bold text-amber-400">Factory Dashboard</span>
+        <span class="badge-nav">Admin</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-gray-400 text-sm hidden sm:block">Welcome, Administrator</span>
+        <button onclick="goHome()" class="btn-logout">Logout</button>
+      </div>
+    </nav>
+
+    <!-- Metric Cards -->
+    <section class="px-4 sm:px-8 pt-6">
+      <h2 class="section-title">Overview</h2>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-3">
+        <div class="metric-card">
+          <div class="metric-icon bg-blue-500/20 text-blue-400">👷</div>
+          <div>
+            <p class="metric-label">Total Employees</p>
+            <p id="m-employees" class="metric-value">5</p>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon bg-amber-500/20 text-amber-400">🪵</div>
+          <div>
+            <p class="metric-label">Wood Stock</p>
+            <p id="m-wood" class="metric-value">0</p>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon bg-green-500/20 text-green-400">🪑</div>
+          <div>
+            <p class="metric-label">Furniture Stock</p>
+            <p id="m-furniture" class="metric-value">0</p>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon bg-purple-500/20 text-purple-400">📋</div>
+          <div>
+            <p class="metric-label">Attendance Today</p>
+            <p id="m-attendance" class="metric-value">0</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Management Tabs -->
+    <section class="px-4 sm:px-8 pt-8 flex-1">
+      <h2 class="section-title">Management</h2>
+      <div class="tab-bar mt-3" id="admin-tabs">
+        <button class="tab-btn active" onclick="switchTab('wood')">🪵 Wood</button>
+        <button class="tab-btn" onclick="switchTab('designs')">📐 Designs</button>
+        <button class="tab-btn" onclick="switchTab('carpentry')">🔨 Carpentry</button>
+        <button class="tab-btn" onclick="switchTab('tests')">🔬 Tests</button>
+        <button class="tab-btn" onclick="switchTab('sales')">💼 Sales</button>
+      </div>
+
+      <div id="tab-wood"     class="tab-panel mt-4"><div id="wood-table"></div></div>
+      <div id="tab-designs"  class="tab-panel hidden mt-4"><div id="designs-table"></div></div>
+      <div id="tab-carpentry"class="tab-panel hidden mt-4"><div id="carpentry-table"></div></div>
+      <div id="tab-tests"    class="tab-panel hidden mt-4"><div id="tests-table"></div></div>
+      <div id="tab-sales"    class="tab-panel hidden mt-4"><div id="sales-table"></div></div>
+    </section>
+    <div class="h-10"></div>
+  </div>
+<section class="px-4 sm:px-8 pt-6">
+  <div class="flex justify-between items-center">
+    <h2 class="section-title">Overview</h2>
+    <button onclick="resetAllData()" class="btn-danger">⚠️ Reset All Data</button>
+  </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SCREEN 6 – EMPLOYEE DASHBOARD
+  ════════════════════════════════════════════════════════════════════ -->
+  <div id="screen-emp-dash" class="screen hidden flex-col min-h-screen">
+    <!-- Top Nav -->
+    <nav class="top-nav">
+      <div class="flex items-center gap-3">
+        <span class="text-2xl">🏭</span>
+        <span class="text-lg font-bold text-amber-400">Factory Dashboard</span>
+        <span id="emp-role-badge" class="badge-nav">Employee</span>
+      </div>
+      <button onclick="goHome()" class="btn-logout">Logout</button>
+    </nav>
+
+    <!-- Dynamic content per role -->
+    <div id="emp-dash-content" class="px-4 sm:px-8 pt-6 flex-1"></div>
+    <div class="h-10"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
